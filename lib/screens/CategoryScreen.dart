@@ -39,6 +39,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         if (mounted) {
           setState(() {
             categories = data.map((category) => Category.fromJson(category)).toList();
+            filteredCategories = categories; // Initialize filtered list
           });
         }
       } else {
