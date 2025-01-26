@@ -19,6 +19,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   late List<Category> categories = [];
 
+  late List<Category> filteredCategories = [];
+
+  TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +53,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
     await fetchCategories();
   }
 
+  void filterCategories(String query) {
+    setState(() {
+      filteredCategories = categories
+          .where((category) => category.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,52 +68,69 @@ class _CategoryScreenState extends State<CategoryScreen> {
         title: Text(widget.title, style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.amber,
       ),
-      body: RefreshIndicator(
-        onRefresh: onRefresh,
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-          ),
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-
-                print(categories[index].name);
-
-                print(categories[index].icon_path);
-
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                labelText: 'Search Categories',
+                prefixIcon: Icon(Icons.search),
+              ),
+              onChanged: (value) {
+                filterCategories(value);
               },
-              child: Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: onRefresh,
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      categories[index].icon_path,
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      categories[index].name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                itemCount: filteredCategories.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+
+                      
+
+                    },
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            filteredCategories[index].icon_path,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            filteredCategories[index].name,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
