@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_service/screens/SettingScreen.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/Category.dart';
@@ -68,6 +69,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: AppBar(
         title: Text(widget.title, style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.amber,
+        actions: <Widget>[
+          IconButton(
+              onPressed: (){
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingScreen(title: 'Settings'),
+                  ),
+                );
+
+              },
+              icon: Icon(Icons.settings)
+          )
+        ],
       ),
       body: Column(
         children: [
