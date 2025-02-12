@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_service/screens/HomeScreen.dart';
+import 'package:flutter_local_service/services/AuthProvider.dart';
 import 'package:flutter_local_service/services/UiProvider.dart';
 import 'package:flutter_local_service/screens/CategoryScreen.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +9,15 @@ void main() {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        // Add other providers here
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +48,7 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
             ),
 
-            home: CategoryScreen(title: 'Category'),
+            home: HomeScreen(title: 'Home'),
 
           );
         },
