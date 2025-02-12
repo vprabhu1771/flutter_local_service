@@ -10,5 +10,7 @@ class Constants {
 
   static const String LOGOUT_ROUTE = "/user/revoke";
 
+  static const String USER_REGISTER_ROUTE = "/register";
+
   static const String USER_INFO_ROUTE = "/user";
 }
