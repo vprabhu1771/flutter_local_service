@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
             ),
 
-            home: CategoryScreen(title: 'Settings'),
+            home: CategoryScreen(title: 'Category'),
 
           );
         },
