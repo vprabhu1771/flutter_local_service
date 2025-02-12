@@ -1,5 +1,6 @@
 import 'package:carousel_images/carousel_images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_service/screens/auth/profile/ProfileScreen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           CategoryScreen(title: 'Category'),
-          CategoryScreen(title: 'Category'),
+          ProfileScreen(title: 'Profile'),
         ],
         onPageChanged: (index) {
           setState(() {
@@ -177,6 +178,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
           },
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        // backgroundColor: Colors.white24         , // Change color here
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            label: 'Category',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.black,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+            _pageController.animateToPage(
+              index,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.ease,
+            );
+          });
+        },
       ),
     );
   }
