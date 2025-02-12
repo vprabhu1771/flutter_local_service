@@ -174,6 +174,51 @@ class AuthProvider extends ChangeNotifier {
 
   }
 
+  Future<void> uploadProfilePicture({required File image}) async {
+    try {
+      // Get the user's token
+      String? token = await storage.read(key: 'token');
+      if (token == null) {
+        // Handle case where user is not authenticated
+        print('User not authenticated');
+        return;
+      }
 
+      // Create a FormData object to include the image file
+      Dio.FormData formData = Dio.FormData.fromMap({
+        'file': await Dio.MultipartFile.fromFile(image.path),
+      });
+
+      // Make a POST request to the API endpoint for uploading profile pictures
+      Dio.Response response = await dio().post(
+        Constants.USER_PROFILE_PIC_UPLOAD_ROUTE,
+        data: formData,
+        options: Dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      // Handle the response accordingly
+      if (response.statusCode == 200) {
+        // Profile picture uploaded successfully
+        print('Profile picture uploaded successfully');
+        // You can handle the successful upload response here
+      } else {
+        // Profile picture upload failed
+        print('Profile picture upload failed: ${response.statusCode} ${response.data}');
+        // You can handle the upload failure here
+      }
+    } catch (e) {
+      print('Error during profile picture upload: $e');
+      if (e is DioError) {
+        // Handle Dio errors, which include more information about the response
+        print('DioError during profile picture upload: ${e.response?.statusCode} ${e.response?.data}');
+      } else {
+        // Handle other types of errors
+        print('Error during profile picture upload: $e');
+      }
+      // Handle network errors or other exceptions here
+    }
+  }
 
 }
