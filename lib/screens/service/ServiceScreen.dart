@@ -46,8 +46,8 @@ class _ServiceScreenState extends State<ServiceScreen> {
 
         if (mounted) {
           setState(() {
-            categories = data.map((category) => Category.fromJson(category)).toList();
-            filteredCategories = categories; // Initialize filtered list
+            services = data.map((row) => Service.fromJson(row)).toList();
+            filteredServices = services; // Initialize filtered list
           });
         }
 
