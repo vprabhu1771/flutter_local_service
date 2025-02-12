@@ -12,7 +12,7 @@ import '../models/User.dart';
 import '../utils/Constants.dart';
 import 'dio.dart';
 
-class Auth extends ChangeNotifier {
+class AuthProvider extends ChangeNotifier {
 
   bool _isLoggedIn = false;
 
