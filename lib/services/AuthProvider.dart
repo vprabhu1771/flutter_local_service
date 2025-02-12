@@ -65,7 +65,7 @@ class AuthProvider extends ChangeNotifier {
       try {
 
         Dio.Response response = await dio().get(
-            Constants.BASE_URL + Constants.USER_INFO_ROUTE,
+            Constants.BASE_URL + Constants.USER_ROUTE,
             options: Dio.Options(headers: {'Authorization' : 'Bearer $token'})
         );
 
