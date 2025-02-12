@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_service/screens/SettingScreen.dart';
+import 'package:flutter_local_service/screens/service/ServiceScreen.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/Category.dart';
@@ -63,6 +64,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
   }
 
+  void navigateToServiceScreen(Category selectedCategory) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ServiceScreen(title: selectedCategory.name, category: selectedCategory),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +124,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   return GestureDetector(
                     onTap: () {
 
-                      
+                      navigateToServiceScreen(filteredCategories[index]);
 
                     },
                     child: Card(
