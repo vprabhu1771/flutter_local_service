@@ -1,9 +1,11 @@
+import 'package:carousel_images/carousel_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 
 import '../services/AuthProvider.dart';
+import 'CategoryScreen.dart';
 import 'auth/LoginScreen.dart';
 import 'auth/RegisterScreen.dart';
 
@@ -19,6 +21,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  final PageController _pageController = PageController();
+
+  List<String> imagelist = [
+    'assets/carousel/appliance.jpg',
+    'assets/carousel/bike_mechanic.jpeg',
+    'assets/carousel/car mechanic.jpeg',
+    'assets/carousel/electrician.jpg',
+    'assets/carousel/painter.jpeg',
+    'assets/carousel/photographer.jpg',
+    'assets/carousel/plumber.jpg',
+  ];
 
   final storage = new FlutterSecureStorage();
 
@@ -47,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +69,31 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(child: Text('Home Screen')),
+      body: PageView(
+        controller: _pageController,
+        children: <Widget>[
+          Center(
+            child: CarouselImages(
+              scaleFactor: 0.6,
+              listImages: imagelist,
+              height: 200.0,
+              borderRadius: 30.0,
+              cachedNetworkImage: true,
+              verticalAlignment: Alignment.topCenter,
+              onTap: (index) {
+                print('Tapped on page $index');
+              },
+            ),
+          ),
+          CategoryScreen(title: 'Category'),
+          CategoryScreen(title: 'Category'),
+        ],
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
       drawer: Drawer(
         child: Consumer<AuthProvider>(
           builder: (context, auth, child) {
