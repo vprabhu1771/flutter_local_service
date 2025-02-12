@@ -13,4 +13,6 @@ class Constants {
   static const String USER_REGISTER_ROUTE = "/register";
 
   static const String USER_INFO_ROUTE = "/user";
+
+  static const String USER_PROFILE_PIC_UPLOAD_ROUTE = "/upload-profile-pic";
 }
