@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_service/screens/HomeScreen.dart';
+import 'package:flutter_local_service/screens/HomePage.dart';
 import 'package:flutter_local_service/screens/SplashScreen.dart';
 import 'package:flutter_local_service/services/AuthProvider.dart';
 import 'package:flutter_local_service/services/UiProvider.dart';

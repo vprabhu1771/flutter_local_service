@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 import '../../services/AuthProvider.dart';
-import '../HomeScreen.dart';
+import '../HomePage.dart';
 
 class LoginScreen extends StatefulWidget {
 

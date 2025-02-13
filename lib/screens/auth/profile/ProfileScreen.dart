@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../services/AuthProvider.dart';
-import '../../HomeScreen.dart';
+import '../../HomePage.dart';
 import 'EditProfileScreen.dart';
 
 class ProfileScreen extends StatefulWidget {

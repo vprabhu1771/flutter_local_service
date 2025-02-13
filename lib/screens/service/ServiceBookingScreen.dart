@@ -22,12 +22,16 @@ class ServiceBookingScreen extends StatefulWidget {
 
 class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
   final storage = FlutterSecureStorage();
+  late AuthProvider provider;
   late String booking_token = '';
   bool _isLoading = false;
+  DateTime _selectedDate = DateTime.now();
+  TimeOfDay _selectedTime = TimeOfDay.now();
 
   @override
   void initState() {
     super.initState();
+    provider = Provider.of<AuthProvider>(context, listen: false); // Fixed listen: false
     readToken();
   }
 
@@ -35,18 +39,19 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
     try {
       final token = await storage.read(key: 'token');
       if (token != null) {
-        Provider.of<AuthProvider>(context, listen: false).tryToken(token: token);
-        setState(() {
-          booking_token = token;
-        });
+        provider.tryToken(token: token);
+        print("Service Booking Screen");
+        print(provider.user?.id);
+        if (mounted) {
+          setState(() {
+            booking_token = token;
+          });
+        }
       }
     } catch (e) {
       print("Error reading token: $e");
     }
   }
-
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -55,7 +60,7 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
     );
-    if (pickedDate != null) {
+    if (pickedDate != null && mounted) {
       setState(() {
         _selectedDate = pickedDate;
       });
@@ -67,7 +72,7 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
       context: context,
       initialTime: _selectedTime,
     );
-    if (pickedTime != null) {
+    if (pickedTime != null && mounted) {
       setState(() {
         _selectedTime = pickedTime;
       });
@@ -81,7 +86,7 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
 
     try {
       Map<String, String> formData = {
-        "customer_id": "2",
+        "customer_id": provider.user?.id.toString() ?? "2", // Fetch from provider
         'service_provider_id': widget.serviceProvider.id.toString(),
         'appointment_date': "${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}",
         'appointment_time': "${_selectedTime.hour}:${_selectedTime.minute}",
@@ -93,7 +98,7 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
         options: Options(headers: {'Authorization': 'Bearer $booking_token'}),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 && mounted) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -109,9 +114,11 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
     } catch (e) {
       print('Error submitting booking: $e');
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
