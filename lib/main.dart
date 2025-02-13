@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_service/screens/HomeScreen.dart';
+import 'package:flutter_local_service/screens/SplashScreen.dart';
 import 'package:flutter_local_service/services/AuthProvider.dart';
 import 'package:flutter_local_service/services/UiProvider.dart';
 import 'package:flutter_local_service/screens/CategoryScreen.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
             ),
 
-            home: HomeScreen(title: 'Home'),
+            home: SplashScreen(),
 
           );
         },
