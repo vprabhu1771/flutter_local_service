@@ -117,56 +117,61 @@ class _ServiceScreenState extends State<ServiceScreen> {
                 ),
                 itemCount: filteredServices.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            filteredServices[index].name,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          // Description Section UI
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.blue[200],
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              filteredServices[index].description,
+                  return InkWell(
+                    onTap: () {
+                      navigateToServiceDetailScreen(filteredServices[index]);
+                    },
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              filteredServices[index].name,
                               style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed: () {
-                              navigateToServiceDetailScreen(filteredServices[index]);
-                            },
-                            child: Text(
-                              'View Details',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.greenAccent,
-                              shape: RoundedRectangleBorder(
+                            SizedBox(height: 8),
+                            // Description Section UI
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.blue[200],
                                 borderRadius: BorderRadius.circular(20),
                               ),
+                              child: Text(
+                                filteredServices[index].description,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 8),
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     navigateToServiceDetailScreen(filteredServices[index]);
+                            //   },
+                            //   child: Text(
+                            //     'View Details',
+                            //     style: TextStyle(fontSize: 14),
+                            //   ),
+                            //   style: ElevatedButton.styleFrom(
+                            //     backgroundColor: Colors.greenAccent,
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(20),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
                       ),
                     ),
                   );

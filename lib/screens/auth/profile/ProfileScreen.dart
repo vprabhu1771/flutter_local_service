@@ -143,7 +143,7 @@ class ProfileWidget extends StatelessWidget {
               Navigator.pop(context);
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(title: 'Home'),
+                  builder: (context) => HomeScreen(),
                 ),
               );
             },

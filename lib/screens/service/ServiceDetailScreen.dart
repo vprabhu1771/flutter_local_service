@@ -40,6 +40,8 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> serviceProviderList = json.decode(response.body)['data'];
 
+      print(serviceProviderList);
+
       setState(() {
         serviceProviders =
             serviceProviderList.map((row) => ServiceProvider.fromJson(row)).toList();
@@ -68,6 +70,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
         itemCount: serviceProviders.length,
         itemBuilder: (context, index) {
           final serviceProvider = serviceProviders[index];
+          print(serviceProvider.phone);
           final isAvailable = serviceProvider.serviceStatus.toLowerCase() == 'available';
 
           return Padding(
@@ -115,7 +118,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                               ? () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => CallScreen(phoneNumber: '6385428910')),
+                              MaterialPageRoute(builder: (context) => CallScreen(phoneNumber: serviceProvider.phone.toString())),
                             );
                           }
                               : null, // Disable the button if service is unavailable

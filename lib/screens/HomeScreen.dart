@@ -4,26 +4,27 @@ import 'package:flutter_local_service/screens/auth/profile/ProfileScreen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
-
 import '../services/AuthProvider.dart';
 import 'CategoryScreen.dart';
+import 'SettingScreen.dart';
 import 'auth/LoginScreen.dart';
 import 'auth/RegisterScreen.dart';
 
-
 class HomeScreen extends StatefulWidget {
-
-  final String title;
-
-  const HomeScreen({Key? key, required this.title}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final PageController _pageController = PageController();
+  final FlutterSecureStorage storage = FlutterSecureStorage();
+
+  int _selectedIndex = 0;
+
+  // Titles for each tab
+  final List<String> _titles = ["Home", "Category", "Profile"];
 
   List<String> imagelist = [
     'assets/carousel/appliance.jpg',
@@ -35,43 +36,53 @@ class _HomeScreenState extends State<HomeScreen> {
     'assets/carousel/plumber.jpg',
   ];
 
-  final storage = new FlutterSecureStorage();
-
-
   @override
   void initState() {
     super.initState();
-
     readToken();
   }
 
   void readToken() async {
-    dynamic token = await this.storage.read(key: 'token');
+    dynamic token = await storage.read(key: 'token');
 
     if (token != null) {
-      // Explicitly cast the token to a String
       String tokenString = token as String;
-
       Provider.of<AuthProvider>(context, listen: false).tryToken(token: tokenString);
-
-      print("read token");
-      print(tokenString);
-
+      print("read token: $tokenString");
     } else {
       print("Token is null");
     }
   }
 
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(_titles[_selectedIndex]), // Dynamic title
+        backgroundColor: Colors.amber,
+        actions: <Widget>[
+          IconButton(
+              onPressed: (){
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingScreen(title: 'Settings'),
+                  ),
+                );
+
+              },
+              icon: Icon(Icons.settings)
+          )
+        ],
       ),
       body: PageView(
         controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
         children: <Widget>[
           Center(
             child: CarouselImages(
@@ -89,98 +100,71 @@ class _HomeScreenState extends State<HomeScreen> {
           CategoryScreen(title: 'Category'),
           ProfileScreen(title: 'Profile'),
         ],
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
       ),
       drawer: Drawer(
         child: Consumer<AuthProvider>(
           builder: (context, auth, child) {
-            if(!auth.authenticated)
-            {
+            if (!auth.authenticated) {
               return ListView(
-                  children: [
-                    ListTile(
-                      title: Text('Login'),
-                      leading: Icon(Icons.login),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => LoginScreen(title: 'Login Screen')),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Register'),
-                      leading: Icon(Icons.app_registration),
-                      onTap: () {
-                        // Handle logout logic
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => RegisterScreen(title: 'Register')),
-                        );
-                      },
-                    ),
-                  ]
+                children: [
+                  ListTile(
+                    title: Text('Login'),
+                    leading: Icon(Icons.login),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => LoginScreen(title: 'Login Screen')),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Register'),
+                    leading: Icon(Icons.app_registration),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterScreen(title: 'Register')),
+                      );
+                    },
+                  ),
+                ],
               );
-            }
-            else
-            {
-              String avatar = auth.user?.avatar as String;
-              String name = auth.user?.name as String;
-              String email = auth.user?.email as String;
+            } else {
+              String avatar = auth.user?.avatar ?? "";
+              String name = auth.user?.name ?? "User";
+              String email = auth.user?.email ?? "user@example.com";
 
               return ListView(
                 children: [
                   DrawerHeader(
+                    decoration: BoxDecoration(color: Colors.blue),
                     child: Column(
                       children: [
-
                         CircleAvatar(
-                          // backgroundColor: Colors.white,
-                          backgroundImage: NetworkImage(avatar),
+                          backgroundImage: avatar.isNotEmpty ? NetworkImage(avatar) : null,
                           radius: 30,
                         ),
-
-                        SizedBox(height: 10,),
-
-                        Text(
-                          name,
-                          style: TextStyle(color: Colors.white),
-                        ),
-
-                        SizedBox(height: 10,),
-
-                        Text(
-                          email,
-                          style: TextStyle(color: Colors.white),
-                        ),
-
+                        SizedBox(height: 10),
+                        Text(name, style: TextStyle(color: Colors.white)),
+                        SizedBox(height: 10),
+                        Text(email, style: TextStyle(color: Colors.white)),
                       ],
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
                     ),
                   ),
                   ListTile(
                     title: Text('Logout'),
                     leading: Icon(Icons.logout),
                     onTap: () {
-                      // Handle logout logic
                       Provider.of<AuthProvider>(context, listen: false).logout();
                     },
                   ),
                 ],
               );
             }
-
           },
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        // backgroundColor: Colors.white24         , // Change color here
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -200,11 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
-            _pageController.animateToPage(
-              index,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.ease,
-            );
+            _pageController.jumpToPage(index); // Sync with PageView
           });
         },
       ),

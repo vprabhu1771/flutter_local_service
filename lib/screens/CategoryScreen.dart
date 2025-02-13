@@ -76,25 +76,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title, style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.amber,
-        actions: <Widget>[
-          IconButton(
-              onPressed: (){
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingScreen(title: 'Settings'),
-                  ),
-                );
-
-              },
-              icon: Icon(Icons.settings)
-          )
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: Text(widget.title, style: TextStyle(color: Colors.black)),
+      //
+      // ),
       body: Column(
         children: [
           Padding(
