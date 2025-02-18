@@ -11,7 +11,7 @@
 
     <application
         android:label="flutter_local_service"
-        android:name="${applicationName}"
+        android:name="Service Provider"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
