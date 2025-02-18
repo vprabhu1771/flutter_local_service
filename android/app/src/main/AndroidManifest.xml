@@ -10,9 +10,9 @@
     </queries>
 
     <application
-        android:label="flutter_local_service"
-        android:name="Service Provider"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Service Provider"
+        android:name="${applicationName}"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

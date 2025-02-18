@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> imagelist = [
     'assets/carousel/appliance.jpg',
     'assets/carousel/bike_mechanic.jpeg',
-    'assets/carousel/car mechanic.jpeg',
+    'assets/carousel/car_mechanic.jpeg',
     'assets/carousel/electrician.jpg',
     'assets/carousel/painter.jpeg',
     'assets/carousel/photographer.jpg',
@@ -59,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_titles[_selectedIndex]), // Dynamic title
-        backgroundColor: Colors.amber,
         actions: <Widget>[
           IconButton(
               onPressed: (){

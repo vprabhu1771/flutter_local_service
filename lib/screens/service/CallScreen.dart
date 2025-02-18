@@ -20,8 +20,7 @@ class CallScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        title: Text('Call Screen'),
-        backgroundColor: Colors.blue,
+        title: Text('Call Screen')
       ),
       body: Center(
         child: Container(

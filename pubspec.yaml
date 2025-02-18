@@ -106,3 +106,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/splash_logo.PNG"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  android_12:
+    image_path: "assets/splash_logo.PNG"

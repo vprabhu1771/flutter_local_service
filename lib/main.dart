@@ -44,10 +44,7 @@ class MyApp extends StatelessWidget {
             //Our custom theme applied
             darkTheme: notifier.isDark ? notifier.darkTheme : notifier.lightTheme,
 
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
-            ),
+            theme: notifier.isDark ? notifier.darkTheme : notifier.greenTheme,
 
             home: SplashScreen(),
 
