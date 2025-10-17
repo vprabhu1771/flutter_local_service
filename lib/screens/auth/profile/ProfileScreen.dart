@@ -1,161 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_service/screens/auth/profile/EditProfileScreen.dart';
+import 'package:flutter_local_service/screens/auth/profile/ProfileImageUploadScreen.dart';
 import 'package:provider/provider.dart';
-
 import '../../../services/AuthProvider.dart';
-import '../../HomePage.dart';
-import 'EditProfileScreen.dart';
+
 
 class ProfileScreen extends StatefulWidget {
+
   final String title;
 
-  const ProfileScreen({Key? key, required this.title}) : super(key: key);
+  const ProfileScreen({super.key, required this.title});
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            "Profile",
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        body: Container(
-          color: Colors.grey[200],
-          child: Consumer<AuthProvider>(
-            builder: (context, auth, child) {
-              String avatar = auth.user?.avatar ?? '';
-              String name = auth.user?.name ?? '';
-              String email = auth.user?.email ?? '';
-
-              return auth.authenticated
-                  ? ProfileWidget(
-                name: name,
-                email: email,
-                imageUrl: avatar,
-              )
-                  : Center(
-                child:
-                Text('User not authenticated'), // Handle unauthenticated state.
-              );
-            },
-          ),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
-    );
-  }
-}
+      body: Consumer<AuthProvider>(
+        builder: (context, authProvider, child) {
+          if (!authProvider.authenticated) {
+            return const Center(child: Text('Please log in to view your profile.'));
+          }
 
-class ProfileWidget extends StatelessWidget {
-  final String name;
-  final String email;
-  final String imageUrl;
+          final user = authProvider.user;
 
-  ProfileWidget({
-    required this.name,
-    required this.email,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
-            padding: EdgeInsets.all(20),
-            child: Row(
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(imageUrl),
+                // Profile Image
+                Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(user?.avatar ?? 'https://example.com/default-avatar.jpg'),
+                    backgroundColor: Colors.grey[200],
+                  ),
                 ),
-                SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      email,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-                Spacer(),
                 IconButton(
+                  icon: Icon(Icons.edit),
                   onPressed: () {
-                    Navigator.of(context).push(
+                    // Navigate to edit profile page
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            EditProfileScreen(title: 'Edit profile'),
+                        builder: (context) => const ProfileImageUploadScreen(title: 'Upload Profile'),
+                      ),
+                    );
+                  }
+                ),
+                const SizedBox(height: 16),
+
+                // User Name
+                ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(user?.name ?? 'No Name'),
+                  trailing: const Icon(Icons.edit),
+                  onTap: () {
+                    // Navigate to edit profile page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EditProfileScreen(title: 'Edit Profile'),
                       ),
                     );
                   },
-                  icon: Icon(Icons.edit),
+                ),
+                const Divider(),
+
+                // Email
+                ListTile(
+                  leading: const Icon(Icons.email),
+                  title: Text(user?.email ?? 'No Email'),
+                ),
+                const Divider(),
+
+                // Phone
+                // ListTile(
+                //   leading: const Icon(Icons.phone),
+                //   title: Text(user?.phone ?? 'No Phone Number'),
+                // ),
+                // const Divider(),
+
+                // Address
+                // ListTile(
+                //   leading: const Icon(Icons.location_on),
+                //   title: Text(user?.address ?? 'No Address'),
+                // ),
+                // const Divider(),
+
+                // Logout Button
+                TextButton(
+                  onPressed: () {
+                    authProvider.logout();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Logged out')),
+                    );
+                  },
+                  child: const Text(
+                    'Logout',
+                    style: TextStyle(fontSize: 16, color: Colors.red),
+                  ),
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            onPressed: () {
-              Provider.of<AuthProvider>(context, listen: false).logout();
-              Navigator.pop(context);
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                ),
-              );
-            },
-            child: Text(
-              'Logout',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
