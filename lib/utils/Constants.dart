@@ -12,7 +12,7 @@ class Constants {
 
   static const String USER_REGISTER_ROUTE = "/register";
 
-  static const String USER_PROFILE_PIC_UPLOAD_ROUTE = "/upload profile pic";
+  static const String USER_PROFILE_PIC_UPLOAD_ROUTE = "/upload-profile-pic";
 
   static const String IMAGE_ERROR_ROUTE = SERVER_DOMAIN + "/storage";
 
@@ -25,6 +25,8 @@ class Constants {
   static const String SETTINGS_ROUTE = '/settings';
 
   static const String FILTER_BY_SERVICE = '/services/filter?service_id=';
+
+  static const String MY_BOOKING_ROUTE = '/my-appointments';
 
   static const String SUBMIT_BOOKING_ROUTE = '/submit-appointment';
 
