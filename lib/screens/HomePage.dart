@@ -1,6 +1,7 @@
 import 'package:carousel_images/carousel_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_service/screens/auth/profile/ProfileScreen.dart';
+import 'package:flutter_local_service/widgets/CustomDrawer.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   // Titles for each tab
-  final List<String> _titles = ["Home", "Category", "Profile"];
+  final List<String> _titles = [
+    "Home",
+    "Category",
+    // "Profile"
+  ];
 
   List<String> imagelist = [
     'assets/carousel/appliance.jpg',
@@ -97,72 +102,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           CategoryScreen(title: 'Category'),
-          ProfileScreen(title: 'Profile'),
+          // ProfileScreen(title: 'Profile'),
         ],
       ),
-      drawer: Drawer(
-        child: Consumer<AuthProvider>(
-          builder: (context, auth, child) {
-            if (!auth.authenticated) {
-              return ListView(
-                children: [
-                  ListTile(
-                    title: Text('Login'),
-                    leading: Icon(Icons.login),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => LoginScreen(title: 'Login Screen')),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: Text('Register'),
-                    leading: Icon(Icons.app_registration),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => RegisterScreen(title: 'Register')),
-                      );
-                    },
-                  ),
-                ],
-              );
-            } else {
-              String avatar = auth.user?.avatar ?? "";
-              String name = auth.user?.name ?? "User";
-              String email = auth.user?.email ?? "user@example.com";
-
-              return ListView(
-                children: [
-                  DrawerHeader(
-                    decoration: BoxDecoration(color: Colors.blue),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: avatar.isNotEmpty ? NetworkImage(avatar) : null,
-                          radius: 30,
-                        ),
-                        SizedBox(height: 10),
-                        Text(name, style: TextStyle(color: Colors.white)),
-                        SizedBox(height: 10),
-                        Text(email, style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('Logout'),
-                    leading: Icon(Icons.logout),
-                    onTap: () {
-                      Provider.of<AuthProvider>(context, listen: false).logout();
-                    },
-                  ),
-                ],
-              );
-            }
-          },
-        ),
-      ),
+      drawer: CustomDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -173,10 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.category),
             label: 'Category',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.person),
+          //   label: 'Profile',
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.black,
